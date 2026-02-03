@@ -1,0 +1,81 @@
+services:
+  mysql_app:
+    image: mysql:8.4
+    container_name: mysql_app
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    volumes:
+      - mysql_app_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  mysql_keycloak:
+    image: mysql:8.4
+    container_name: mysql_keycloak
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: keycloak
+    volumes:
+      - mysql_keycloak_data:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.6
+    container_name: keycloak
+    command: ["start-dev"]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+      KC_DB: mysql
+      KC_DB_URL: "jdbc:mysql://mysql_keycloak:3306/keycloak?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      KC_DB_USERNAME: root
+      KC_DB_PASSWORD: root
+
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+    depends_on:
+      mysql_keycloak:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  symfony:
+    image: php:8.4-cli
+    container_name: symfony
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: "mysql://app:app@mysql_app:3306/app?serverVersion=8.4&charset=utf8mb4"
+    depends_on:
+      mysql_app:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    command: >
+      sh -lc "
+        php -v &&
+        php -S 0.0.0.0:8000 -t public
+      "
+
+volumes:
+  mysql_app_data:
+  mysql_keycloak_data:
