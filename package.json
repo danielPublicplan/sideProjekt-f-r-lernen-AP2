@@ -1,0 +1,23 @@
+{
+  "name": "testprojekt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielPublicplan/sideProjekt-f-r-lernen-AP2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielPublicplan/sideProjekt-f-r-lernen-AP2/issues"
+  },
+  "homepage": "https://github.com/danielPublicplan/sideProjekt-f-r-lernen-AP2#readme",
+  "dependencies": {
+    "jwk-to-pem": "^2.0.7"
+  },
+  "description": ""
+}

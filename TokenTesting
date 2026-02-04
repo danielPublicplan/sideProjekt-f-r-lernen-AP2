@@ -1,0 +1,101 @@
+###Um den Token zu bekommen###
+
+export KC=http://localhost:8080
+export REALM=demo
+export CLIENT_ID=symfony-api
+export CLIENT_SECRET=op1JKX6H0kBLW1l5FUwV9Yc73scm220k
+export USER=user
+export PASS=123
+
+curl -s -X POST "$KC/realms/$REALM/protocol/openid-connect/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=password" \
+  -d "client_id=$CLIENT_ID" \
+  -d "client_secret=$CLIENT_SECRET" \
+  -d "username=$USER" \
+  -d "password=$PASS" | jq .
+###Ausgabe###
+"access_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsMDF5b21tQkcwV1BlUDBhQVNfZ3E0TFZHX3NKRXdmd29hWDhBV2RyblRzIn0.eyJleHAiOjE3NzAxMjk0OTUsImlhdCI6MTc3MDEyOTE5NSwianRpIjoiOWQ5ZTQ0ZjktOGUzNi00NzI5LWJlM2EtNzE4ZDE3YjMzNjI5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9kZW1vIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjlhMGYwMzQzLTRkNzAtNDc0YS1iZTNhLTc2MjQ0YWM5M2U0OSIsInR5cCI6IkJlYXJlciIsImF6cCI6InN5bWZvbnktYXBpIiwic2lkIjoiOTgzNjFhODUtMTRmZi00ZDcxLTgzNDYtYmFhYTdhODY4MmQ4IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIvKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWRlbW8iLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6InRlc3QgdXNlciIsInByZWZlcnJlZF91c2VybmFtZSI6InVzZXIiLCJnaXZlbl9uYW1lIjoidGVzdCIsImZhbWlseV9uYW1lIjoidXNlciIsImVtYWlsIjoidXNlckBtYWlsLmNvbSJ9.edCRfJavzSpUIkD4jUF9ZSiRQ3DZzLZcJDqIv44ybqf3ARCae1ke_4CJeZDaOVban0yFGHWjGnXGIB9CsI13bcOEdzMPT9oUA81uUG4R9-Kf4YoAg4TkPzXmtHr6-3r1THDffFAzgCyKyBTvstRubLxUinDizvTMfPxO-pATlJzfiTAOkvDxCP6QXtjObxmnT9nQtiswwOngmqW6zGMbP6BC5NPtYinSQygfdz0SqkgyTIsnIDIlF8yQ70f8fYy3cNMdlJckVBvxmvmSzn1W-vdfgduvVxLyA3u3AIIH7jCxupN2sWS3twIUtzMsk8c3JOHHELZQHN-6KfS-0qoUXg",
+  "expires_in": 300,
+  "refresh_expires_in": 1800,
+  "refresh_token": "eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI5ZGI5OWVjMy02MDU3LTQ5ZTktOTE5YS1iMDNiZDNiNTA4ZGMifQ.eyJleHAiOjE3NzAxMzA5OTUsImlhdCI6MTc3MDEyOTE5NSwianRpIjoiODQ1YWU2ZTYtZTE3OC00NjhmLThiODctMzkyM2M3NTlhZDJhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9kZW1vIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9kZW1vIiwic3ViIjoiOWEwZjAzNDMtNGQ3MC00NzRhLWJlM2EtNzYyNDRhYzkzZTQ5IiwidHlwIjoiUmVmcmVzaCIsImF6cCI6InN5bWZvbnktYXBpIiwic2lkIjoiOTgzNjFhODUtMTRmZi00ZDcxLTgzNDYtYmFhYTdhODY4MmQ4Iiwic2NvcGUiOiJyb2xlcyB3ZWItb3JpZ2lucyBiYXNpYyBlbWFpbCBwcm9maWxlIGFjciJ9.lOIcosq-7aq5sV6FReRcgEf-tYUl3HVM2CR2MeW15JyrWGhTUywg89O-Qh3nohcbBOPyzZnocvyNdVkXzpglug",
+  "token_type": "Bearer",
+  "not-before-policy": 0,
+  "session_state": "98361a85-14ff-4d71-8346-baaa7a8682d8",
+  "scope": "email profile"
+
+
+
+###Schnellere Variante um an den access_token zu komme (welcher, wieso auch immer, kürzer ist)###
+TOKEN=$(curl -s -X POST "$KC/realms/$REALM/protocol/openid-connect/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=password" \
+  -d "client_id=$CLIENT_ID" \
+  -d "client_secret=$CLIENT_SECRET" \
+  -d "username=$USER" \
+  -d "password=$PASS" | jq -r .access_token)
+
+echo "$TOKEN" | head -c 40; echo
+###Ausgabe###
+eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwi
+
+
+
+
+
+###API Call testen###
+TOKEN="eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwi"
+
+curl -i http://localhost:8000/api/me \
+  -H "Authorization: Bearer $TOKEN"
+
+
+
+###JWKS bekommen###
+curl -s http://localhost:8080/realms/demo/protocol/openid-connect/certs  
+
+
+
+
+###Einfügen des public Keys###
+cat > app/config/keycloak/public.pem <<'EOF'
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnp6NMUJ7kZWObbftoWRrP/dxBGNkTk10UbV94cTC/gF45okoNmXVNQd4NopcEx5edSPaDXf6j1A+UjSTioO0MmXIvctnEpgsGskWqcbqOtxyreSTJcKBuGE6h1OqhYkzTrW0hcpuuQKzAFvRNhtXrOsMb7QbbXwxLyBuiAShER47FjQpASyD02wfmjGlbe/b9v3Nw39x4NJ0buT112GrTHP3Gsnm0QNZBDwNDyi1rWJ8il989oWUR0NTw9f+rbmv59gQqSVKkv63UWn2VSAQclYQNdZOTGKkrl+oVeRS35/JEg+jLM69JT0Dv6IqJpCVUFhwIP7fOK/szRcQMqgNRwIDAQAB
+-----END PUBLIC KEY-----
+EOF
+
+
+###access Token wird geürpft, ob es ein JWT ist###
+TOKEN="eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsMDF5b21tQkcwV1BlUDBhQVNfZ3E0TFZHX3NKRXdmd29hWDhBV2RyblRzIn0.eyJleHAiOjE3NzAyMDI2OTAsImlhdCI6MTc3MDIwMjM5MCwianRpIjoiNTVlZTgxZmEtNDllYi00OWU4LWFmZjAtMGFjN2E5MzNhYzcwIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9kZW1vIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjlhMGYwMzQzLTRkNzAtNDc0YS1iZTNhLTc2MjQ0YWM5M2U0OSIsInR5cCI6IkJlYXJlciIsImF6cCI6InN5bWZvbnktYXBpIiwic2lkIjoiNjU0YzMwZTEtZTYwZS00MjM2LWJjYmItOWQ1NDQxYmRjNjg4IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIvKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWRlbW8iLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6InRlc3QgdXNlciIsInByZWZlcnJlZF91c2VybmFtZSI6InVzZXIiLCJnaXZlbl9uYW1lIjoidGVzdCIsImZhbWlseV9uYW1lIjoidXNlciIsImVtYWlsIjoidXNlckBtYWlsLmNvbSJ9.QqQZeKjkNEFo_jJBYToZELguuSujnJ2uq864Ep8U1gEUdTMK7-iK-nukkrEtzf-m7dWaOEACrqbznxk8Qtmny-c0E0GRuj6P0lC-XyTX6rgc448H1siEbR3ISi4zlYJZxdSRyKH_UZmEx1MmVF5h-bO2lN3e_XJVs0UU1zqkZDfqKutJZa3yUoPF-uJYzG5-qtJxlvhbdTy9Zj-zxwS1CkHBA7Dg0ow-vwVcxji4vmyWh4ByuPLfOx0Jd7AHmii8GSSMXU8HbEtODq1D3VazyNO6vwGyrTzX4DP2hHKo8u_MYOfVp9d3Yd1w-BmjIUn92iWnTcGYJbh9FVtsPO7H0w" python3 - <<'PY'
+import os, json, base64
+t=os.environ["TOKEN"].split(".")
+def b64(s):
+    s += "=" * (-len(s) % 4)
+    return base64.urlsafe_b64decode(s.encode())
+print("header:", json.loads(b64(t[0])))
+print("payload:", json.loads(b64(t[1])))
+PY
+
+###Key-File Validierung vom Public Key###
+openssl pkey -pubin -in app/config/keycloak/public.pem -text -noout
+
+
+
+###neuen Token für Api Call bekommen###
+KC="http://localhost:8080"
+REALM="demo"
+CLIENT_ID="symfony-api"
+CLIENT_SECRET="op1JKX6H0kBLW1l5FUwV9Yc73scm220k"
+USER="user"
+PASS="123"
+
+TOKEN=$(curl -s -X POST "$KC/realms/$REALM/protocol/openid-connect/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=password" \
+  -d "client_id=$CLIENT_ID" \
+  -d "client_secret=$CLIENT_SECRET" \
+  -d "username=$USER" \
+  -d "password=$PASS" \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])")
+
+echo "$TOKEN" | head -c 40; echo
