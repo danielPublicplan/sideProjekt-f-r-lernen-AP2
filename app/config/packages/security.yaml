@@ -1,0 +1,21 @@
+security:
+  providers:
+    noop:
+      memory: null
+
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    api:
+      pattern: ^/api
+      stateless: true
+      provider: noop
+      custom_authenticators:
+        - App\Security\KeycloakJwtAuthenticator
+
+  access_control:
+  - { path: ^/api/admin, roles: ROLE_ADMIN }
+  - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+
