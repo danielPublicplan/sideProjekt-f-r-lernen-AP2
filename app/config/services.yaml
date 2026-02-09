@@ -1,11 +1,5 @@
 # yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
 
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-# See also https://symfony.com/doc/current/service_container/import.html
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
 services:
@@ -13,16 +7,24 @@ services:
     autowire: true
     autoconfigure: true
 
-  # macht alle Klassen in src/ automatisch als Services verfügbar
+  # Registriert alle Klassen in src/ als Services (Controller etc.)
   App\:
     resource: '../src/'
     exclude:
       - '../src/DependencyInjection/'
       - '../src/Kernel.php'
 
-  # Konfiguration für unseren Keycloak JWT Authenticator
-  App\Security\KeycloakJwtAuthenticator:
+  # JWT Authenticator (Keycloak ODER Local)
+  App\Security\MultiIssuerJwtAuthenticator:
     arguments:
-      $jwksUri: '%env(KEYCLOAK_JWKS_URI)%'
-      $issuer: '%env(KEYCLOAK_ISSUER)%'
-      $azp: '%env(default::KEYCLOAK_AZP)%'
+      $keycloakIssuer: '%env(KEYCLOAK_ISSUER)%'
+      $keycloakJwksUri: '%env(KEYCLOAK_JWKS_URI)%'
+      $keycloakAzp: '%env(default::KEYCLOAK_AZP)%'
+      $localIssuer: '%env(LOCAL_ISSUER)%'
+      $localPublicKeyPath: '%env(resolve:LOCAL_PUBLIC_KEY)%'
+
+  # Local JWT Issuer (für /auth/local/login)
+  App\Security\LocalJwtIssuer:
+    arguments:
+      $issuer: '%env(LOCAL_ISSUER)%'
+      $privateKeyPath: '%env(resolve:LOCAL_PRIVATE_KEY)%'

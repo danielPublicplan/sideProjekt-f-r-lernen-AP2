@@ -1,5 +1,9 @@
 {
     "require": {
-        "symfony/cache": "^8.0"
+        "symfony/cache": "^8.0",
+        "symfony/password-hasher": "^8.0",
+        "symfony/uid": "^8.0",
+        "web-token/jwt-framework": "^4.1",
+        "symfony/http-client": "^8.0"
     }
 }
