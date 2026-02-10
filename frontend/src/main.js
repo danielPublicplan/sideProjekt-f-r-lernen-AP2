@@ -39,6 +39,7 @@ async function init() {
   if (authenticated) {
     tokenSource = "keycloak";
     accessToken = KC.token;
+    window.__TOKEN__ = accessToken;
   }
 
   el.innerHTML = `
@@ -126,3 +127,4 @@ init().catch((e) => {
   console.error(e);
   document.getElementById("app").textContent = String(e);
 });
+window.__TOKEN__ = accessToken;

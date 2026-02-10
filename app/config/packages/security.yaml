@@ -1,4 +1,8 @@
 security:
+  password_hashers:
+    App\Entity\LocalUser:
+      algorithm: auto
+
   providers:
     noop:
       memory: null

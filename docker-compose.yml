@@ -57,13 +57,17 @@ services:
       - "8080:8080"
 
   symfony:
-    image: php:8.4-cli
+    build:
+      context: ./symfony
+      dockerfile: Dockerfile
     container_name: symfony
     working_dir: /app
     volumes:
       - ./app:/app
     environment:
       APP_ENV: dev
+      KEYCLOAK_ISSUER: "http://localhost:8080/realms/demo"
+      KEYCLOAK_JWKS_URI: "http://keycloak:8080/realms/demo/protocol/openid-connect/certs"
       DATABASE_URL: "mysql://app:app@mysql_app:3306/app?serverVersion=8.4&charset=utf8mb4"
     depends_on:
       mysql_app:
@@ -72,7 +76,7 @@ services:
       - "8000:8000"
     command: >
       sh -lc "
-        php -v &&
+        composer install --no-interaction &&
         php -S 0.0.0.0:8000 -t public
       "
 

@@ -3,7 +3,7 @@
 export KC=http://localhost:8080
 export REALM=demo
 export CLIENT_ID=symfony-api
-export CLIENT_SECRET=op1JKX6H0kBLW1l5FUwV9Yc73scm220k
+export CLIENT_SECRET=F7qOqoKqK2yiX5iZn9QRiLfZCSoq8dAn
 export USER=user
 export PASS=123
 
@@ -85,7 +85,7 @@ openssl pkey -pubin -in app/config/keycloak/public.pem -text -noout
 KC="http://localhost:8080"
 REALM="demo"
 CLIENT_ID="symfony-api"
-CLIENT_SECRET="op1JKX6H0kBLW1l5FUwV9Yc73scm220k"
+CLIENT_SECRET="F7qOqoKqK2yiX5iZn9QRiLfZCSoq8dAn"
 USER="user"
 PASS="123"
 
@@ -108,3 +108,46 @@ echo "$TOKEN" | head -c 40; echo
 openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out app/config/local-jwt/private.pem
 ##public.pem###
 openssl pkey -in app/config/local-jwt/private.pem -pubout -out app/config/local-jwt/public.pem
+
+
+###Password_hash for local_user###
+php -r 'echo password_hash("adminpass", PASSWORD_BCRYPT), PHP_EOL;'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+curl -s -X POST "http://localhost:8080/realms/demo/protocol/openid-connect/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=password" \
+  -d "client_id=symfony-api" \
+  -d "client_secret=k0gR6idoucTiu5QVeULx6szBN8tcoKQN" \
+  -d "username=user" \
+  -d "password=123"
+
+TOKEN=$(curl -s -X POST "http://localhost:8080/realms/demo/protocol/openid-connect/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=password" \
+  -d "client_id=symfony-api" \
+  -d "client_secret=k0gR6idoucTiu5QVeULx6szBN8tcoKQN" \
+  -d "username=user" \
+  -d "password=123" \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])")
+
+echo "$TOKEN" | head -c 40; echo

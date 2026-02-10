@@ -2,14 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\LocalUser;
+use App\Repository\LocalUserRepository;
 use App\Security\LocalJwtIssuer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class LocalAuthController
 {
-    public function __construct(private LocalJwtIssuer $issuer) {}
+    public function __construct(
+        private LocalUserRepository $users,
+        private UserPasswordHasherInterface $passwordHasher,
+        private LocalJwtIssuer $issuer,
+    ) {}
 
     #[Route('/auth/local/login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
@@ -22,18 +29,17 @@ final class LocalAuthController
             return new JsonResponse(['message' => 'Missing email/password'], 400);
         }
 
-        $users = require \dirname(__DIR__, 2).'/config/local_users.php';
-
-        if (!isset($users[$email]) || !password_verify($password, $users[$email]['hash'])) {
+        /** @var LocalUser|null $user */
+        $user = $this->users->findOneBy(['email' => $email]);
+        if (!$user || !$this->passwordHasher->isPasswordValid($user, $password)) {
             return new JsonResponse(['message' => 'Invalid credentials'], 401);
         }
 
-        $roles = $users[$email]['roles'] ?? ['ROLE_USER'];
+        $roles = $user->getRoles();
 
-        // Wir setzen die Claims so, dass dein Rollen-Mapping gleich bleibt:
         $token = $this->issuer->issue([
-            'email' => $email,
-            'preferred_username' => $email,
+            'email' => $user->getEmail(),
+            'preferred_username' => $user->getEmail(),
             'realm_access' => [
                 'roles' => array_map(
                     fn (string $r) => strtolower(str_replace('ROLE_', '', $r)),
